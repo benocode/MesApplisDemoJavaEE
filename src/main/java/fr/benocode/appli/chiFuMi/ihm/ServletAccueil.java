@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -21,6 +22,8 @@ public class ServletAccueil extends HttpServlet {
 	private Map<Integer, String> signes;
 	private int choixOrdinateur;
 	private String choixUtilisateur;
+	private String resultat;
+	private String message;
 
 	/**
 	 * Initialisation du dictionnaire comprenant les signes du jeu
@@ -54,15 +57,34 @@ public class ServletAccueil extends HttpServlet {
 		System.out.println("Choix utilisateur : " + choixUtilisateur);
 		
 		if (choixUtilisateur.equals(signes.get(choixOrdinateur))) {
-			System.out.println("Egalité");
+			resultat = "Egalité";
+			message = "Une autre partie pour nous départager ?";
 		} else if (choixUtilisateur.equals("chi") && signes.get(choixOrdinateur).equals("mi") || 
 				choixUtilisateur.equals("fou") && signes.get(choixOrdinateur).equals("chi") || 
 				choixUtilisateur.equals("mi") && signes.get(choixOrdinateur).equals("fou")) {
-			System.out.println("Vous avez gagné [Vous : " + choixUtilisateur + " VS Ordi : " + signes.get(choixOrdinateur) + "]");
+			resultat = "Gagné !";
+			switch (choixUtilisateur) {
+			case("chi") -> message = "La pierre écrase les ciseaux";
+			case("fou") -> message = "La feuille enveloppe la pierre";
+			case("mi") -> message = "Les ciseaux coupe la feuille";
+			}
 		} else {
-			System.out.println("Vous avez perdu [Vous : " + choixUtilisateur + " VS Ordi : " + signes.get(choixOrdinateur) + "]");
+			resultat = "Perdu";
+			switch (signes.get(choixOrdinateur)) {
+			case("chi") -> message = "La pierre écrase les ciseaux";
+			case("fou") -> message = "La feuille enveloppe la pierre";
+			case("mi") -> message = "Les ciseaux coupe la feuille";
+			}
 		}
+		System.out.println(resultat);
 		
+		request.setAttribute("resultat", resultat);
+		request.setAttribute("message", message);
+		RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/jsp/ChiFuMi/resultat.jsp");
+		
+		/* Généré une erreur 404 */
+		//RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/jsp/resultat.jsp");
+		
+		rd.forward(request, response);
 	}
-
 }

@@ -1,18 +1,17 @@
 <%@ page language="java"
 	contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"
-    errorPage="../Erreurs/affichage_erreur.jsp"
 %>
-
+    
 <!DOCTYPE html>
 <html>
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-	<meta name="description" content="Jeu du chi fou mi">
+	<meta name="description" content="Application de suivi des repas">
 	<meta name="author" content="benocode">
 	
-	<title>Chi Fu Mi</title>
+	<title>Ajouter un repas</title>
 	
 	<!-- Bootstrap core CSS -->
 	<link href="../../vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
@@ -46,27 +45,31 @@
 	<header class="container">
 		<hr>
 		<div class="row">
-			<h1 class="mx-auto my-5">Chi... Fou... Mi...</h1>
-		</div>
-		<div class="row">
-			<h2 class="mx-auto">Choisissez votre signe :</h2>
+			<h1 class="mx-auto my-5">Ajout</h1>
 		</div>
 	</header>
 	
 	<main class="container">
-		<div class="my-10 d-flex justify-content-around">
-			<form method="post">
-				<button type="submit" name="choix" value="chi">
-					<img alt="chi" src="images/chi.png">
+		<form method="post" action="AjoutRepas">
+			<div class="row d-flex justify-content-center">
+				<div>
+					<label for="date">date :</label>
+					<input type="date" name="date" autofocus><br>
+					<label for="heure">heure : </label>
+					<input type="time" name="heure"><br>
+					<label for="repas">repas : </label>
+					<textarea name="" cols="30" rows="3"></textarea><br>
+				</div>
+			</div>
+			<div class="d-flex justify-content-center">
+				<button type="submit" class="mx-5 btn btn-secondary">
+					Valider
 				</button>
-				<button type="submit" name="choix" value="fou">
-					<img alt="fou" src="images/fou.png">
-				</button>
-				<button type="submit" name="choix" value="mi">
-					<img alt="mi" src="images/mi.png">
-				</button>
-			</form>
-		</div>
+				<a href="accueil.html" class="mx-5 btn btn-secondary">
+					Annuler
+				</a>
+			</div>
+		</form>
 	</main>
 	<footer class="py-5 bg-dark fixed-bottom">
 		<div class="container">

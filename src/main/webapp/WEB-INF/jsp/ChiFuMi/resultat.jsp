@@ -1,11 +1,15 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+<%@ page language="java"
+	contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"
+    errorPage="../Erreurs/affichage_erreur.jsp"
+%>
+    
 <!DOCTYPE html>
 <html>
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-	<meta name="description" content="Jeu de devinette de nombre">
+	<meta name="description" content="Jeu du chi fou mi">
 	<meta name="author" content="benocode">
 	
 	<title>Chi Fu Mi</title>
@@ -39,17 +43,23 @@
 		</div>
 	</nav>
 	
+	<%
+	String resultat = (String) request.getAttribute("resultat");
+	String message = (String) request.getAttribute("message");
+	//int resultat = (Integer) request.getAttribute("resultat"); //Erreur pour lever un NumberFormatException
+	%>
+	
 	<header class="container">
 		<hr>
 		<div class="row">
-			<h1 class="mx-auto my-5">Résultat</h1>
-		</div>
-		<div class="row">
-			<h2 class="mx-auto">Choisissez votre signe :</h2>
+			<h1 class="mx-auto my-5"><%=resultat%></h1>
 		</div>
 	</header>
 	
 	<main class="container">
+		<div class="d-flex justify-content-around">
+			<p><%=message%></p>
+		</div>
 		<div class="my-10 d-flex justify-content-around">
 			<form method="get">
 				<button type="submit">
