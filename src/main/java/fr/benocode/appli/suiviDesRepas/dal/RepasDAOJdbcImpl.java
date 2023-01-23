@@ -1,21 +1,19 @@
 package fr.benocode.appli.suiviDesRepas.dal;
 
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.PreparedStatement;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.format.DateTimeFormatter;
+import java.sql.ResultSet;
+import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 
 import fr.benocode.appli.suiviDesRepas.BusinessException;
 import fr.benocode.appli.suiviDesRepas.bo.Repas;
 
 public class RepasDAOJdbcImpl implements RepasDAO {
 
-	private static final String INSERT="INSERT INTO suivi_des_repas(date, repas) VALUES(?,?);";
+	private static final String INSERT="INSERT INTO suivi_des_repas(date, menu) VALUES(?,?);";
 	private static final String SELECT_ALL="SELECT * FROM suivi_des_repas;";
-	private Date dateFormatDateSQL;
-	private LocalDateTime dateFormatLocalDateTime;
 	
 	@Override
 	public void insert(Repas repas) throws BusinessException {
@@ -29,45 +27,39 @@ public class RepasDAOJdbcImpl implements RepasDAO {
 		try(Connection cnx = ConnectionProvider.getConnection())
 		{
 			PreparedStatement pstmt = cnx.prepareStatement(INSERT);
-			pstmt.setDate(1, new Date(repas.getDate()));
-			pstmt.setString(2, repas.getDetailRepas());
+			pstmt.setObject(1, repas.getDate());
+			pstmt.setString(2, repas.getMenu());
 			pstmt.executeUpdate();
 		}
 		catch(Exception e)
 		{
 			e.printStackTrace();
 			BusinessException businessException = new BusinessException();
-			if(e.getMessage().contains("CH_avis_note"))
-			{
-				businessException.ajouterErreur(CodesResultatDAL.INSERT_AVIS_NOTE_ECHEC);
-			}
-			else
-			{
-				businessException.ajouterErreur(CodesResultatDAL.INSERT_OBJET_ECHEC);
-			}
+			businessException.ajouterErreur(CodesResultatDAL.INSERT_OBJET_ECHEC);
 			throw businessException;
 		}	
 	}
 
 	@Override
-	public void selectAll() throws BusinessException {
-		// TODO Auto-generated method stub
-		
+	public List<Repas> selectAll() throws BusinessException {
+		List<Repas> ListeRepas = new ArrayList<>();
+		try(Connection cnx = ConnectionProvider.getConnection())
+		{
+			Statement stmt = cnx.createStatement();
+			ResultSet rs = stmt.executeQuery(SELECT_ALL);
+			
+			// Traitement du résultat
+			while (rs.next()) {
+				ListeRepas.add(new Repas(rs.getTimestamp("date").toLocalDateTime(), rs.getString("menu")));
+			}
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+			BusinessException businessException = new BusinessException();
+			businessException.ajouterErreur(CodesResultatDAL.SELECT_OBJETS_ECHEC);
+			throw businessException;
+		}
+		return ListeRepas;
 	}
-	
-	// Méthodes pour modifier le format de la date
-	public LocalDateTime convertToLocalDateTime(Date dateToConvert) {
-		dateFormatLocalDateTime = dateToConvert.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
-		// Affichage console
-		DateTimeFormatter dateTimePattern = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
-		System.out.println(dateFormatLocalDateTime.format(dateTimePattern));
-		return dateFormatLocalDateTime;
-	}
-	
-	public Date convertToDateSQL(LocalDateTime dateToConvert) {
-		dateFormatDateSQL = (Date) Date.from(dateToConvert.atZone(ZoneId.systemDefault()).toInstant());
-		// Affichage console
-		System.out.println(dateFormatDateSQL);
-		return dateFormatDateSQL;
-	}	
 }

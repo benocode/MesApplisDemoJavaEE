@@ -6,12 +6,12 @@ import java.time.format.DateTimeFormatter;
 public class Repas {
 
 	private LocalDateTime date;
-	private String detailRepas;
+	private String menu;
 	
 	// Constructeur tous paramètres
-	public Repas(LocalDateTime date, String detailRepas) {
+	public Repas(LocalDateTime date, String menu) {
 		this.date = date;
-		this.detailRepas = detailRepas;
+		this.menu = menu;
 	}
 
 	// Getters & setters
@@ -23,18 +23,18 @@ public class Repas {
 		this.date = date;
 	}
 
-	public String getDetailRepas() {
-		return detailRepas;
+	public String getMenu() {
+		return menu;
 	}
 
-	public void setDetailRepas(String detailRepas) {
-		this.detailRepas = detailRepas;
+	public void setMenu(String menu) {
+		this.menu = menu;
 	}
 	
 	// Méthode toString()
 	@Override
 	public String toString() {
 		DateTimeFormatter dateTimePattern = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
-		return this.date.format(dateTimePattern) + " : " + this.detailRepas;
+		return this.date.format(dateTimePattern) + " : " + this.menu;
 	}
 }

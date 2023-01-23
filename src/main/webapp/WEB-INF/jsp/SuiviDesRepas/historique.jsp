@@ -1,3 +1,6 @@
+<%@page import="java.util.List"%>
+<%@page import="fr.benocode.appli.suiviDesRepas.messages.LecteurMessage"%>
+<%@page import="fr.benocode.appli.suiviDesRepas.bo.Repas"%>
 <%@ page language="java"
 	contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"
@@ -47,37 +50,62 @@
 		<div class="row">
 			<h1 class="mx-auto my-5">Historique</h1>
 		</div>
+		<%
+			List<Integer> listeCodesErreur = (List<Integer>)request.getAttribute("listeCodesErreur");
+			if(listeCodesErreur!=null)
+			{
+		%>
+				<p style="color:red;">Erreur :</p>
+		<%
+				for(int codeErreur:listeCodesErreur)
+				{
+		%>
+					<p><%=LecteurMessage.getMessageErreur(codeErreur)%></p>
+		<%	
+				}
+			}
+		%>
 	</header>
 	
 	<main class="container">
-		<form method="get" action="AjoutRepas">
-			<table class="row d-flex justify-content-center">
-				<th>
-					<td>Date</td>
-					<td>Heure</td>
-					<td>Repas</td>
-				</th>
-				<tr>
-					<%
-						for (String current : listeRepas) {
-					%>
-					<td><%out.print(current);%></td>
-					<td><%out.print(current);%></td>
-					<%
-						}
-					%>		
-				</tr>
-				
-			</table>
-			<div class="d-flex justify-content-center">
-				<button type="submit" class="mx-5 btn btn-secondary">
+		<table class="row d-flex justify-content-center table table-bordered">
+			<tr>
+				<th>Date</th>
+				<th>Heure</th>
+				<th>Repas</th>
+			</tr>
+			<%
+				List<Repas> listeRepas = (List<Repas>) request.getAttribute("listeRepas");
+				if(listeRepas!=null && listeRepas.size()>0)
+				{
+					for (Repas repas : listeRepas) {
+			%>
+					<tr>
+						<td><%=repas.getDate().toLocalDate()%></td>
+						<td><%=repas.getDate().toLocalTime()%></td>
+						<td><%=repas.getMenu()%></td>
+					</tr>
+			<%
+					}
+				} else {
+			%>
+					<tr>
+						<td colspan="3">Il n'y a aucun repas à afficher</td>
+					</tr>
+			<%
+				}
+			%>		
+		</table>
+		<div class="d-flex justify-content-center">
+			<form method="get" action="AjoutRepas">
+				<button class="mx-5 btn btn-secondary">
 					Ajouter un nouveau repas
 				</button>
+			</form>
 				<a href="accueil.html" class="mx-5 btn btn-secondary">
 					Retour à l'accueil
 				</a>
-			</div>
-		</form>
+		</div>
 	</main>
 	<footer class="py-5 bg-dark fixed-bottom">
 		<div class="container">

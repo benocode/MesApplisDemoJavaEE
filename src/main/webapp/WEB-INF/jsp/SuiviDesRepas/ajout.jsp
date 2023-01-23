@@ -1,3 +1,5 @@
+<%@page import="java.util.List"%>
+<%@page import="fr.benocode.appli.suiviDesRepas.messages.LecteurMessage"%>
 <%@ page language="java"
 	contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"
@@ -47,6 +49,21 @@
 		<div class="row">
 			<h1 class="mx-auto my-5">Ajout</h1>
 		</div>
+		<%
+			List<Integer> listeCodesErreur = (List<Integer>)request.getAttribute("listeCodesErreur");
+			if(listeCodesErreur!=null)
+			{
+		%>
+				<p style="color:red;">Erreur :</p>
+		<%
+				for(int codeErreur:listeCodesErreur)
+				{
+		%>
+					<p><%=LecteurMessage.getMessageErreur(codeErreur)%></p>
+		<%	
+				}
+			}
+		%>
 	</header>
 	
 	<main class="container">
@@ -54,11 +71,11 @@
 			<div class="row d-flex justify-content-center">
 				<div>
 					<label for="date">date :</label>
-					<input type="date" name="date" autofocus><br>
+					<input type="date" name="date_form" autofocus><br>
 					<label for="heure">heure : </label>
-					<input type="time" name="heure"><br>
+					<input type="time" name="heure_form"><br>
 					<label for="repas">repas : </label>
-					<textarea name="" cols="30" rows="3"></textarea><br>
+					<textarea name="menu_form" cols="30" rows="3"></textarea><br>
 				</div>
 			</div>
 			<div class="d-flex justify-content-center">
